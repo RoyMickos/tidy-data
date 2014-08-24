@@ -32,9 +32,7 @@ run_analysis <- function() {
   names(train_s) <- 'Subject'
   # extract mean and standard deviation
   keep <- find_names(column_names$V2)  # find names with 'mean' and 'std' in them
-  #print(keep)
   train_x <- train_x[keep]
-  #print(names(train_x))
   
   # descriptive activity names
   print('creating descriptive activity names...')
@@ -45,21 +43,14 @@ run_analysis <- function() {
   # final tidy data set
   print('creating tidy data set...')
   f <- as.factor(train_s$Subject)
-  #print(dim(f))
-  #print(dim(train_x))
   tidy <- tapply(train_x[,1], f, mean)
   for (i in 2:ncol(train_x)) {
     tidy <- cbind(tidy, tapply(train_x[,i], f, mean))
   }
   tidy <- as.data.frame(tidy)
-  print(class(tidy))
   names(tidy) <- names(train_x)
   subj <- names(table(train_s))
-  #subj <- c(c("0"), subj)
   tidy <- cbind(subj, tidy)
-  #print(names(tidy))
-  print(dim(tidy))
-  print(dim(train_x))
   write.table(tidy,'tidy_data.txt', row.names=FALSE)
   tidy
 }
